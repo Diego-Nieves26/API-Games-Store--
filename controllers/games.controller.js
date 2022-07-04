@@ -1,5 +1,7 @@
 // Models
 const { Game } = require("../models/game.model");
+const { Console } = require("../models/console.model");
+const { Review } = require("../models/reviews.model");
 
 // Utils
 const { catchAsync } = require("../utils/catchAsync.util");
@@ -19,7 +21,9 @@ const createGame = catchAsync(async (req, res, next) => {
 });
 
 const getAllGames = catchAsync(async (req, res) => {
-  const games = await Game.findAll();
+  const games = await Game.findAll({
+    include: [{ model: Review }, { model: Console }],
+  });
 
   res.status(200).json({
     status: "success",
@@ -45,11 +49,18 @@ const disableGame = catchAsync(async (req, res) => {
 });
 
 const recordReview = catchAsync(async (req, res) => {
-  const { comment } = req.body;
+  const { gameId } = req.params;
+  const { userId, comment } = req.body;
+
+  const newReview = await Review.create({
+    userId,
+    gameId,
+    comment,
+  });
 
   res.status(201).json({
     status: "success",
-    comment,
+    newReview,
   });
 });
 

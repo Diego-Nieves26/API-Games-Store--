@@ -1,17 +1,25 @@
+const bcrypt = require("bcryptjs");
+
 // Models
 const { User } = require("../models/user.model");
 
 // Utils
 const { catchAsync } = require("../utils/catchAsync.util");
+const { AppError } = require("../utils/appError.util");
 
 const createUser = catchAsync(async (req, res, next) => {
   const { username, email, password } = req.body;
 
+  const salt = await bcrypt.genSalt(12);
+  const hashPassword = await bcrypt.hash(password, salt);
+
   const newUser = await User.create({
     name: username,
     email,
-    password,
+    password: hashPassword,
   });
+
+  newUser.password = undefined;
 
   res.status(201).json({
     status: "success",
@@ -22,10 +30,20 @@ const createUser = catchAsync(async (req, res, next) => {
 const accessUser = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
+  const user = await User.findOne({ where: { email, status: "active" } });
+
+  if (!user) {
+    return next(new AppError("Credentials invalid", 404));
+  }
+
+  const isPasswordaValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordaValid) {
+    return next(new AppError("Credentials invalid", 404));
+  }
+
   res.status(201).json({
     status: "success",
-    email,
-    password,
   });
 });
 
