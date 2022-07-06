@@ -20,7 +20,7 @@ const createGame = catchAsync(async (req, res, next) => {
   });
 });
 
-const getAllGames = catchAsync(async (req, res) => {
+const getAllGames = catchAsync(async (req, res, next) => {
   const games = await Game.findAll({
     include: [{ model: Review }, { model: Console }],
   });
@@ -40,7 +40,7 @@ const updateGame = catchAsync(async (req, res, next) => {
   res.status(204).json({ status: "success" });
 });
 
-const disableGame = catchAsync(async (req, res) => {
+const disableGame = catchAsync(async (req, res, next) => {
   const { game } = req;
 
   await game.update({ status: "disable" });
@@ -48,12 +48,10 @@ const disableGame = catchAsync(async (req, res) => {
   res.status(204).json({ status: "success" });
 });
 
-const recordReview = catchAsync(async (req, res) => {
+const recordReview = catchAsync(async (req, res, next) => {
   const { gameId } = req.params;
   const { comment } = req.body;
   const { sessionUser } = req;
-
-  console.log(sessionUser);
 
   const newReview = await Review.create({
     userId: sessionUser.id,

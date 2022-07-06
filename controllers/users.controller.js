@@ -75,6 +75,7 @@ const deleteUser = catchAsync(async (req, res, next) => {
 
 const getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.findAll({
+    attributes: ["id", "name", "email", "status"],
     where: { status: "active" },
   });
 
