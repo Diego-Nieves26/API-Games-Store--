@@ -50,10 +50,13 @@ const disableGame = catchAsync(async (req, res) => {
 
 const recordReview = catchAsync(async (req, res) => {
   const { gameId } = req.params;
-  const { userId, comment } = req.body;
+  const { comment } = req.body;
+  const { sessionUser } = req;
+
+  console.log(sessionUser);
 
   const newReview = await Review.create({
-    userId,
+    userId: sessionUser.id,
     gameId,
     comment,
   });
