@@ -1,8 +1,8 @@
-﻿﻿## Decripcion
+## Decripcion
 
 Aplicación sobre videojuegos, en esta se puede registrar consolas, usuarios y juegos.
 
-Los juegos pueden pertenecer a diferentes consolas, y cada consola puede tener diferentes videojuegos, a la vez, los usuarios pueden degar comentarios sobre los juegos.
+Los juegos pueden pertenecer a diferentes consolas, y cada consola puede tener diferentes videojuegos, a la vez, los usuarios pueden dejar comentarios sobre los juegos.
 
 ## Funciones o datos del proyecto
 
@@ -29,7 +29,7 @@ Los juegos pueden pertenecer a diferentes consolas, y cada consola puede tener d
 - PATCH "/:id" Actualizar el título de una consola (name)
 - DELETE "/:id" Deshabilitar una consola
 
-## Lenguajes y Herramientas
+## Lenguajes o Herramientas
 
 - Express-validator
 - PostgreSql
