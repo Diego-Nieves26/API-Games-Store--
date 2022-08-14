@@ -1,10 +1,7 @@
 const { app } = require("./app");
 
 // Models
-const { User } = require("./models/user.model");
-const { Game } = require("./models/game.model");
-const { Review } = require("./models/reviews.model");
-const { Console } = require("./models/console.model");
+const { initModels } = require("./models/initModels");
 
 // Utils
 const { db } = require("./utils/database.util");
@@ -14,23 +11,14 @@ db.authenticate()
   .catch((err) => console.log(err));
 
 // Establish models relations
-User.hasMany(Review, { foreignKey: "userId" });
-Review.belongsTo(User);
-
-Game.hasMany(Review, { foreignKey: "gameId" });
-Review.belongsTo(Game);
-
-Game.belongsToMany(Console, {
-  through: "gamesInConsole",
-});
-Console.belongsToMany(Game, {
-  through: "gamesInConsole",
-});
+initModels();
 
 db.sync()
   .then(() => console.log("Db synced"))
   .catch((err) => console.log(err));
 
-app.listen(4000, () => {
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
   console.log("Express app running!!");
 });
